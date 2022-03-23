@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+      <title>World Time</title>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width-device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <p id="local">Loading...</p>
+        <div id="output"></div>
+        
+        <script>
+            var timer = setInterval(displayWorldTime, 1000);
+            
+            var cities = [
+                {name: "Umtata", utcOffset: 2, flag: "South-Africa.png"},
+                {name: "Bhopal", utcOffset: 5, flag: "India.png"},
+                {name: "Samarra", utcOffset: 4, flag: "Irag.png"},
+                {name: "Ramla", utcOffset: 2, flag: "Israel.png"},
+                {name: "Peja", utcOffset: 1, flag: "Kosovo.png"},
+                {name: "Mzuzu", utcOffset: 2, flag: "Malawi.png"},
+                {name: "Toliara", utcOffset: 3, flag: "Madagascar.png"},
+                {name: "Dakar", utcOffset: 0, flag: "Senegal.png"},
+                {name: "Da Lat", utcOffset: 7, flag: "Vietnam.png"},
+                {name: "Encamp", utcOffset: 1, flag: "Andorra.png"}, 
+            ];
+            
+            cities.sort(compare);
+            
+            function compare(a, b){
+                var cityA = a.name;
+                var cityB = b.name;
+                
+                var comparison = 0;
+                if(cityA > cityB){
+                    comparison = 1;
+                }else if(cityA < cityB){
+                    comparison = -1;
+                }
+                return comparison;
+            }
+            
+
+            function getUtcTime(){
+                var dt = new Date();
+                var utcOffset = dt.getTimezoneOffset() * 60000;
+                var utcTime = new Date(dt.getTime() + utcOffset);
+                return utcTime.getTime();
+            }
+            
+            function getCurrentTime(utcOffset){
+                var mil = 1000 * 60 * 60;
+                var time = new Date(getUtcTime() + utcOffset * mil);
+                return time.toLocaleTimeString();
+            }
+            
+            function displayWorldTime(){
+                var dt = new Date();
+                document.getElementById("local").innerHTML = "Local time :" + dt.toLocaleTimeStringString();
+                
+                var output = `<table id="cities">`;
+                output +=`
+                     <tr>
+                        <th class="col1"></th>
+                        <th class="col2"></th>
+                        <th></th>
+                     </tr>
+                  `;
+                
+                for(a = 0; a < cities.length; a++){
+                    output += `
+                       <tr>
+                           <td><img src="img/${cities[a].flag}"/></td>
+                           <td>${cities[a].name}</td>
+                           <td>${getCurrentTime(cities[a].utcOffset)}</td>
+                   `;
+                }
+                output += `</table>`;
+                document.getElementById("output").innerHTML = output;
+                
+            }
+            
+            
+        </script>
+    </body>
+</html>
